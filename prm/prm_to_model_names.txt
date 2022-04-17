@@ -1,0 +1,28 @@
+# prm name - model name
+
+ * K08_CUB_S20RTS.prm - CUB_S20RTS
+ * K08_Eu_fixed.prm - Eurasia fixed
+ * K08_GAP_P4.prm - GAP_P4
+ * K08_LLNL_G3D.prm - LLNL_G3D
+ * K08_Nb_fixed.prm - Nubia_fixed
+ * K08_Nbx2.prm - Nubia X 2
+ * K08_Nbx4.prm - Nubia X 4
+ * K08_P06_CSloc.prm - Reference
+ * K08_P06_CSloc_05Mantlevisc.prm - Mantle viscosity X 0.5
+ * K08_P06_CSloc_2Mantlevisc.prm - Mantle viscosity X 2
+ * K08_P06_CSloc_B.prm - Mantle viscosity B
+ * K08_P06_CSloc_hor_detach_200_300.prm - Slab detached
+ * K08_P06_CSloc_hor_detach_200_300_Crete.prm - Slab partially detached
+ * K08_P06_CSloc_lin.prm - Two-layer viscosity
+ * K08_P06_CSloc_max.prm - K08_max
+ * K08_P06_CSloc_min.prm - K08_min
+ * K08_P06_CSloc_noLMtomo.prm - No LM tomo
+ * K08_P06_CSloc_noslab.prm - No slab
+ * K08_P06_CSloc_noslab_200.prm - Slab detached and removed
+ * K08_P06_CSloc_ver_detach_Kephalonia.prm - Vertical tear Kefalonia
+ * K08_S40RTS.prm - S40RTS
+ * K08_SAVANI.prm - SAVANI
+ * K08_SEMUCB.prm - SEMUCB
+ * K08_SL2013_S40RTS.prm - SL2013_S40RTS
+ * K08_TX2015.prm - TX2015
+ * K08_notomo.prm - No tomo

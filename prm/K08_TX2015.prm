@@ -1,0 +1,528 @@
+set Additional shared libraries                = /home/glerum/aspect/01092016/aspect/lib_aegean_ascii/build_release/libaegean.so 
+set Dimension = 3
+set CFL number                             = 1.0
+set End time                               = 0
+set Start time                             = 0
+set Adiabatic surface temperature          = 1613.0
+set Surface pressure                       = 0
+set Use years in output instead of seconds = true
+set Nonlinear solver scheme                = iterated Stokes
+set Output directory = K08_TX2015
+set Number of cheap Stokes solver steps        = 300
+set Max nonlinear iterations                   = 50
+set Max nonlinear iterations in pre-refinement = 0
+set Linear solver tolerance                    = 1e-5 
+set Linear solver tolerance correction         = 1 
+set Nonlinear solver tolerance                 = 1e-5 
+set Pressure normalization                     = surface
+
+subsection Gravity model
+  set Model name = radial constant
+
+  subsection Radial constant
+    set Magnitude = 9.81
+  end
+end
+
+subsection Geometry model
+  set Model name = two merged chunks
+  subsection Two merged chunks
+    set Chunk inner radius = 3471000
+    set Chunk outer radius = 6370500
+    set Chunk grid merge radius = 6241000 
+    set Grid merge radius repetitions = 16
+    set Outer radius repetitions = 1
+    set Chunk minimum longitude = -19.8
+    set Chunk maximum longitude = 19.8
+    set Longitude repetitions = 16
+    set Chunk minimum latitude = -19.8
+    set Chunk maximum latitude = 19.8
+    set Latitude repetitions = 16
+  end
+  subsection Chunk
+    set Chunk minimum longitude = -20
+    set Chunk maximum longitude = 20
+    set Chunk minimum latitude = -20
+    set Chunk maximum latitude = 20
+    set Chunk inner radius = 3471000
+    set Chunk outer radius = 6371000
+    set Radius repetitions = 1
+    set Longitude repetitions = 1
+    set Latitude repetitions = 1
+  end
+end
+
+subsection Initial conditions
+  set Model name = ascii pip 
+  subsection Function
+    set Function expression = 1600
+  end
+  # crust plate, L plate, OO crust, YO crust 1, YO crust 2, PB crust, PB L, slab 1 WZ crust, slab 1 WZ L, slab 2 WZ crust, slab 2 WZ L, NAF crust, NAF L, slab 1, slab 2
+  subsection Pip
+    set Data directory                            = /home/glerum/aspect/01092016/aspect/data/initial-conditions/ascii-data/modelM/
+    set Number of slabs                           = 2
+    set Slab grid file name                       = slabgrid_M2.dat
+    set Slab max depth                            = 800000.0
+    set Number of horizontal grid points per slab = 83,49
+    set Number of vertical grid points per slab   = 81,81
+    set Slab subduction velocity per slab         = 9e-10,9e-10 
+    set Slab thickness per slab                   = 120000.0,120000.0
+    set Slab number per field                     = 10, 10, 10, 10, 0, 1 #per volume
+    set Polygon region file name                  = regions_M.dat
+    set Number of points per region               = 32, 48, 44, 47, 35
+    set List of compositional types               = \
+                                                    Eurasia, Eurasia, \
+                                                    Mixed continental weak zone, Mixed continental weak zone, \
+                                                    Slab, Slab
+    set Field numbers per volume                  = 0,2,3,4;1;5,7,9,11;6,8,10,12;13;14
+    set Region number per field                   = 10,10,1,3,4,10,10,10,10,10,10,10,10,10,10
+    set Region numbers per volume                 = 0,1,2,3,4;0,1,2,3,4;0,1,2,3,4;0,1,2,3,4;10;10
+    set Plate type per region                     = Thin continental plate, Old oceanic plate, Thin continental plate, Young oceanic plate, Young oceanic plate
+    set Adjust trench temperature                 = false # default=true
+    set Oceanic plate top depth                   = 0
+    set Thin old oceanic plate top depth          = 0
+    set Old oceanic plate top depth               = 0
+    set Young oceanic plate top depth             = 0
+    set Continental plate top depth               = 0
+    set Black sea plate top depth                 = 0
+    set Thin continental plate top depth          = 0
+    set EEC plate top depth                       = 0
+ 
+    # Note that the OB lithostatic pressure also depends on the initial conditions!
+    set Refinement limit for approximation        = 0
+
+  end
+  subsection AdiabatAscii
+    set Age bottom boundary layer      = 1e8
+    set Age top boundary layer         = 0
+    set Thickness bottom boundary layer      = 2e5
+    set Thickness top boundary layer         = 200e3
+
+    set Base model                     = ascii data
+
+    set Add temperature perturbations = true
+
+    set Add smoothing to top perturbations = true
+    set Top smoothing depth                = 170e3 #300e3 
+    set Top smoothing width                = 25e3 
+
+    set Add smoothing to bottom perturbations = true
+    set Bottom smoothing depth                = 2600e3
+    set Bottom smoothing width                = 70e3
+
+    set Add smoothing to boundary perturbations = true
+    set Boundary smoothing angle                = 18.0
+    set Boundary smoothing angle width          = 1.0
+
+    set Add smoothing to slab perturbations = true
+    set Slab smoothing depth                = 744e3
+    set Slab smoothing angle                = 5
+    set Slab smoothing width                = 70e3
+    set Slab smoothing angle width          = 1.75
+
+    set Subadiabaticity                = 0e0
+  end
+  subsection Ascii data model
+    set Data directory = /home/glerum/aspect/090915/aspect/data/initial-conditions/aegean/ascii_data/Karato/
+    set Data file name = TX2015_K08dT2_cut.aspect
+  end
+end
+
+subsection Boundary temperature model
+  set Model name = initial temperature 
+
+  subsection Spherical constant
+    set Inner temperature = 3590
+    set Outer temperature = 285  
+  end
+
+end
+
+subsection Boundary composition model
+  set Model name = initial composition
+
+  subsection Initial composition
+    set Maximal composition = 1
+    set Minimal composition = 0
+  end
+
+end
+subsection Compositional fields
+  set Number of fields = 15
+end 
+
+subsection Compositional initial conditions
+  set Model name = ascii data function 
+  subsection Ascii data model
+   set Data directory = /home/glerum/aspect/01092016/aspect/data/compositional-initial-conditions/ascii-data/modelK_thinslabfault/
+   set Data file name = comp_modelK_onlyslab1_WZ_slab12last_thin_15c.aspect
+  end
+   subsection Ascii data with function
+      set Construct slab gap = false
+      set Composition number slab = 13
+      # radius, lon, colat
+      set Variable names     = r, theta, phi
+      set Function expression = if(r<6251000,0,1) 
+      set Base model = ascii data
+      subsection Ascii data model
+        set Data directory = /home/glerum/aspect/01092016/aspect/data/compositional-initial-conditions/ascii-data/modelM/
+        set Data file name = comp_t_modelM_no_SNAF_OL.aspect
+      end
+   end
+end
+
+
+subsection Material model
+  set Material averaging = harmonic average 
+
+  set Model name         = table viscoplastic
+
+  # crust plate, L plate, OO crust, YO crust 1, YO crust 2, PB crust, PB L, slab 1 WZ crust, slab 1 WZ L, slab 2 WZ crust, slab 2 WZ L, NAF crust, NAF L, slab 1, slab 2
+  subsection Table model
+    set Viscosity model                               = multicomponent vp
+    set Bilinear interpolation                        = true
+    set Compressible                                  = true                                              
+    set Data directory                                = /home/glerum/aspect/090915/aspect/data/material-model/steinberger/
+    set Latent heat                                   = false
+    set Material file names                           = pyrolite_slb11_M_3.tab, UM_pyrolite_5.tab, crustdata_comp_2700.txt, crustdata_comp_3000_2.txt
+    set Material number per composition               = 0,2,1,3,3,3,2,1,2,1,2,1,2,1,1,1
+    set Reference viscosity                           = 1e21                                             
+  end
+  subsection Multicomponent
+  ##
+  # Listing of material and rheology type in above order.
+  # At the 660 km phase boundary, the change in viscosity
+  # regime is smoothed with a htan.
+  ##
+    set List of material types          = Upper mantle, \
+                                          Continental crust, Upper mantle, \
+                                          Oceanic crust, Oceanic crust, Oceanic crust, \
+                                          Continental crust, Upper mantle, \
+                                          Continental crust, Upper mantle, \
+                                          Continental crust, Upper mantle, \
+                                          Continental crust, Upper mantle, \
+                                          Upper mantle, Upper mantle
+    set List of deformation types       = Wet olivine, \
+                                          Wet olivine, Wet olivine, \
+                                          Constant21, Wet olivine, Wet olivine,\
+                                          Constant21, Constant21, \
+                                          Constant21, Constant21, \
+                                          Constant22, Constant22, \
+                                          Constant21, Constant21, \
+                                          Wet olivine, Wet olivine
+    set Minimum viscosity               = 1e19
+    set Maximum viscosity               = 1e24
+    set Reference temperature           = 293
+    set Viscosity averaging scheme      = geometric
+    set Use 660 viscosity smoothing     = true
+    set Initial viscosities             = 5e22
+    set Function constants              = d_WZ=40000., y_WZ=270000.
+    set Function expression             = 1; \
+                                          1; 1; \
+                                          1.; 1; 1; \
+                                          if(y<-65431&y>-322171,0.1,if(atan2(y,x)<12.14/180.*pi&atan2(y,x)>6.961/180.*pi&asin(z/sqrt(x*x+y*y+z*z))>-5.41/180.*pi&asin(z/sqrt(x*x+y*y+z*z))<2.10/180.*pi,50,1)); if(y<-65431&y>-322171,0.1,if(atan2(y,x)<12.14/180.*pi&atan2(y,x)>9.990/180.*pi&asin(z/sqrt(x*x+y*y+z*z))>-2.17/180.*pi&asin(z/sqrt(x*x+y*y+z*z))<2.10/180.*pi,50,1)); \
+                                          1.; 1.; \
+                                          5; 5; \
+                                          if(atan2(y,x)<5.0/180.*pi,0.1,1); if(atan2(y,x)<5.0/180.*pi,0.1,1); \
+                                          if(sqrt(x*x+y*y+z*z)>6251000,0.5,1.0); 1 
+  end
+end
+ 
+ 
+subsection Mesh refinement
+  set Initial adaptive refinement        = 3
+  set Initial global refinement          = 1
+  set Strategy                           = minimum refinement function
+  subsection Minimum refinement function
+    set Coordinate system   = spherical
+    set Variable names      = x,y,z
+    set Function constants  = Cyprus_depth=300000.0,L_depth=140000.0, crust_depth=15000.0, slab_depth=700000.0, radius=6371000.
+    set Function expression = if(x>radius-crust_depth,4,if(x>radius-slab_depth,3,1))
+  end
+end
+
+
+subsection Model settings
+  set Fixed temperature boundary indicators   = inner, outer, lowereast, lowerwest, lowersouth, lowernorth
+  set Fixed composition boundary indicators   = inner, outer, lowereast, lowerwest, lowersouth, lowernorth
+  set Prescribed velocity boundary indicators = upperwest: ascii data, uppereast: ascii data, uppernorth: ascii data, uppersouth: ascii data
+  set Tangential velocity boundary indicators = inner, outer, lowereast, lowerwest, lowersouth, lowernorth
+  set Zero velocity boundary indicators       = 
+  set Include adiabatic heating               = true
+  set Include latent heat                     = false
+  set Include shear heating                   = false
+end
+
+subsection Boundary traction model
+   subsection Time and position dependent lithostatic pressure
+     # TODO there is no need to calculated a grid for both, say, upperwest and lowerwest, the grid is the same
+     set Number of lateral bins = 100,100,300,300
+     set Number of radial bins  = 1000
+     set Number of midpoint quadrature points base = 20
+     set Calculate pressure grids from initial conditions = true
+   end
+end
+
+subsection Boundary velocity model
+  subsection Ascii data model
+    set Data directory = /home/glerum/aspect/01092016/aspect/data/velocity-boundary-conditions/ascii-data/modelM/
+    set Data file name = modelM_5km_200km_%s.0.txt
+  end
+  subsection Function
+    set Function expression = 0.01;0;0
+  end
+end
+
+subsection Postprocess
+  set List of postprocessors = velocity statistics, visualization, point values, depth average
+  subsection Depth average
+    set List of output variables      = viscosity, temperature
+    set Number of zones               = 150
+  end
+  subsection Point values
+    set Evaluation points = \    
+     6.33942e+06,-421049,-399736; \
+     6.34442e+06,-421389,-310976; \
+     6.34811e+06,-421619,-222126; \
+     6.35061e+06,-421799,-133345; \
+     6.35181e+06,-421889,-44415.1; \
+     6.35181e+06,-421879,44432.1; \
+     6.35061e+06,-421789,133285; \
+     6.32243e+06,-331400,-665377; \
+     6.33113e+06,-331849,-576937; \
+     6.33852e+06,-332179,-488356; \
+     6.34472e+06,-332479,-399666; \
+     6.34971e+06,-332769,-311016; \
+     6.35341e+06,-332968,-222166; \
+     6.35591e+06,-333088,-133365; \
+     6.35711e+06,-333158,-44413.1; \
+     6.35711e+06,-333158,44453.1; \
+     6.35591e+06,-333128,133325; \
+     6.32643e+06,-243009,-665477; \
+     6.33512e+06,-243379,-577017; \
+     6.34252e+06,-243659,-488436; \
+     6.34871e+06,-243868,-399726; \
+     6.35371e+06,-244108,-310946; \
+     6.35741e+06,-244188,-222175; \
+     6.3599e+06,-244318,-133355; \
+     6.3612e+06,-244338,-44484.1; \
+     6.3612e+06,-244348,44413.1; \
+     6.3599e+06,-244358,133315; \
+     6.31934e+06,-154459,-753738; \
+     6.32923e+06,-154718,-665407; \
+     6.33792e+06,-154918,-576927; \
+     6.34532e+06,-155038,-488416; \
+     6.35151e+06,-155228,-399696; \
+     6.35651e+06,-155378,-310986; \
+     6.3602e+06,-155428,-222185; \
+     6.3627e+06,-155468,-133325; \
+     6.3639e+06,-155538,-44425.1; \
+     6.3639e+06,-155518,44406.1; \
+     6.3627e+06,-155488,133365; \
+     6.3602e+06,-155418,222215; \
+     6.32084e+06,-66194,-753748; \
+     6.33083e+06,-66325.9,-665387; \
+     6.33942e+06,-66407.8,-576987; \
+     6.34691e+06,-66472.8,-488446; \
+     6.35311e+06,-66548.7,-399686; \
+     6.35801e+06,-66616.7,-310936; \
+     6.3618e+06,-66601.7,-222205; \
+     6.3642e+06,-66641.7,-133295; \
+     6.3655e+06,-66630.7,-44447.1; \
+     6.3655e+06,-66687.6,44426.1; \
+     6.3642e+06,-66661.6,133335; \
+     6.3618e+06,-66635.7,222126; \
+     6.32124e+06,22060.7,-753708; \
+     6.33113e+06,22084.7,-665417; \
+     6.33972e+06,22106.6,-576977; \
+     6.34721e+06,22112.6,-488406; \
+     6.35341e+06,22179.6,-399696; \
+     6.35841e+06,22219.5,-311006; \
+     6.3621e+06,22183.6,-222116; \
+     6.3646e+06,22179.6,-133275; \
+     6.3658e+06,22191.6,-44474.1; \
+     6.3658e+06,22245.5,44484.1; \
+     6.3646e+06,22196.6,133335; \
+     6.3621e+06,22171.6,222205; \
+     6.33013e+06,110493,-665407; \
+     6.33882e+06,110633,-576917; \
+     6.34632e+06,110733,-488396; \
+     6.35251e+06,110873,-399756; \
+     6.35741e+06,111013,-310996; \
+     6.3612e+06,111053,-222146; \
+     6.3636e+06,111103,-133345; \
+     6.3649e+06,111103,-44481.1; \
+     6.3649e+06,111133,44436.1; \
+     6.3636e+06,111093,133375; \
+     6.3612e+06,111043,222215; \
+     6.35741e+06,110993,310946; \
+     6.32803e+06,198834,-665477; \
+     6.33662e+06,199094,-576927; \
+     6.34412e+06,199403,-488436; \
+     6.35031e+06,199583,-399726; \
+     6.35521e+06,199773,-311016; \
+     6.35901e+06,199833,-222225; \
+     6.3615e+06,199923,-133335; \
+     6.3627e+06,199923,-44395.1; \
+     6.3627e+06,199943,44493.1; \
+     6.3615e+06,199963,133305; \
+     6.35901e+06,199833,222126; \
+     6.35531e+06,199713,310956; \
+     6.32463e+06,287154,-665397; \
+     6.33323e+06,287584,-576997; \
+     6.34072e+06,287884,-488346; \
+     6.34691e+06,288184,-399786; \
+     6.35181e+06,288403,-310996; \
+     6.35561e+06,288573,-222215; \
+     6.35801e+06,288733,-133355; \
+     6.35931e+06,288783,-44425.1; \
+     6.35931e+06,288813,44448.1; \
+     6.35801e+06,288683,133335; \
+     6.35561e+06,288573,222156; \
+     6.35181e+06,288433,310986; \
+     6.32004e+06,375485,-665397; \
+     6.32863e+06,375975,-576927; \
+     6.33602e+06,376424,-488416; \
+     6.34222e+06,376804,-399766; \
+     6.34721e+06,377104,-311006; \
+     6.35091e+06,377284,-222146; \
+     6.35341e+06,377444,-133295; \
+     6.35461e+06,377573,-44483.1; \
+     6.35461e+06,377513,44476.1; \
+     6.35341e+06,377484,133275; \
+     6.35091e+06,377294,222195; \
+     6.34721e+06,377064,311026; \
+     6.31414e+06,463636,-665397; \
+     6.32273e+06,464305,-576947; \
+     6.33023e+06,464875,-488336; \
+     6.33642e+06,465285,-399726; \
+     6.34132e+06,465664,-310976; \
+     6.34502e+06,465974,-222106; \
+     6.34751e+06,466164,-133275; \
+     6.34871e+06,466194,-44489.1; \
+     6.34871e+06,466244,44499; \
+     6.34751e+06,466134,133285; \
+     6.34502e+06,465934,222116; \
+     6.34132e+06,465724,310976; \
+     6.31564e+06,552546,-576947; \
+     6.32303e+06,553196,-488366; \
+     6.32923e+06,553725,-399756; \
+     6.33422e+06,554195,-311006; \
+     6.33792e+06,554494,-222156; \
+     6.34042e+06,554714,-133325; \
+     6.34162e+06,554804,-44410.1; \
+     6.34162e+06,554854,44473.1; \
+     6.34042e+06,554754,133285; \
+     6.33792e+06,554544,222136; \
+     6.33422e+06,554195,311006; \
+     6.30735e+06,640697,-576947; \
+     6.31474e+06,641436,-488376; \
+     6.32094e+06,642026,-399776; \
+     6.32583e+06,642605,-311016; \
+     6.32953e+06,642895,-222175; \
+     6.33203e+06,643155,-133325; \
+     6.33323e+06,643265,-44403.1; \
+     6.33323e+06,643295,44494.1; \
+     6.33203e+06,643155,133325; \
+     6.32953e+06,642935,222215; \
+     6.32583e+06,642585,311016; \
+     6.32094e+06,642056,399706; \
+     6.29775e+06,728678,-576957; \
+     6.30515e+06,729507,-488386; \
+     6.31134e+06,730246,-399766; \
+     6.31624e+06,730866,-311006; \
+     6.31994e+06,731256,-222146; \
+     6.32243e+06,731495,-133295; \
+     6.32363e+06,731655,-44454.1; \
+     6.32363e+06,731695,44471.1; \
+     6.32243e+06,731515,133325; \
+     6.31994e+06,731276,222136; \
+     6.31624e+06,730826,310966; \
+     6.31134e+06,730246,399716; \
+     6.28696e+06,816569,-576977; \
+     6.29436e+06,817498,-488396; \
+     6.30055e+06,818327,-399766; \
+     6.30545e+06,818907,-311016; \
+     6.30914e+06,819396,-222116; \
+     6.31164e+06,819756,-133345; \
+     6.31284e+06,819876,-44485.1; \
+     6.31284e+06,819846,44455.1; \
+     6.31164e+06,819736,133375; \
+     6.30914e+06,819366,222205; \
+     6.30545e+06,818957,310996; \
+     6.30055e+06,818297,399676; \
+     6.28237e+06,905329,-488416; \
+     6.28846e+06,906128,-399686; \
+     6.29336e+06,906898,-310996; \
+     6.29705e+06,907457,-222185; \
+     6.29955e+06,907787,-133275; \
+     6.30075e+06,908007,-44480.1; \
+     6.30075e+06,907927,44486.1; \
+     6.29955e+06,907767,133325; \
+     6.29705e+06,907367,222205; \
+     6.29336e+06,906928,310956; \
+     6.28846e+06,906188,399696; \
+     6.26908e+06,992940,-488366; \
+     6.27527e+06,993889,-399706; \
+     6.28007e+06,994649,-311016; \
+     6.28376e+06,995258,-222175; \
+     6.28626e+06,995648,-133335; \
+     6.28746e+06,995838,-44392.1; \
+     6.28746e+06,995868,44425.1; \
+     6.28626e+06,995648,133305; \
+     6.28376e+06,995278,222146; \
+     6.28007e+06,994719,310936; \
+     6.27517e+06,993899,399746; \
+     6.25459e+06,1.08035e+06,-488356; \
+     6.26078e+06,1.08135e+06,-399686; \
+     6.26568e+06,1.08225e+06,-310946; \
+     6.26928e+06,1.08295e+06,-222166; \
+     6.27177e+06,1.08325e+06,-133305; \
+     6.27297e+06,1.08355e+06,-44418.1; \
+     6.27297e+06,1.08355e+06,44449.1; \
+     6.27177e+06,1.08335e+06,133275; \
+     6.26928e+06,1.08285e+06,222175; \
+     6.26558e+06,1.08225e+06,311036; \
+     6.26068e+06,1.08145e+06,399696; \
+     6.245e+06,1.16868e+06,-399686; \
+     6.24989e+06,1.16968e+06,-310996; \
+     6.25359e+06,1.17028e+06,-222215; \
+     6.25599e+06,1.17078e+06,-133275; \
+     6.25719e+06,1.17098e+06,-44461.1; \
+     6.25719e+06,1.17098e+06,44467.1; \
+     6.25599e+06,1.17078e+06,133355; \
+     6.25359e+06,1.17028e+06,222215; \
+     6.24989e+06,1.16958e+06,311016; \
+     6.245e+06,1.16868e+06,399766; \
+     6.22811e+06,1.25581e+06,-399736; \
+     6.2329e+06,1.25681e+06,-311006; \
+     6.2366e+06,1.25751e+06,-222185; \
+     6.239e+06,1.25801e+06,-133305; \
+     6.2403e+06,1.25821e+06,-44425.1; \
+     6.2403e+06,1.25821e+06,44443.1; \
+     6.239e+06,1.25801e+06,133305; \
+     6.2366e+06,1.25761e+06,222136; \
+     6.2329e+06,1.25681e+06,311016; \
+     6.22811e+06,1.25581e+06,399716; \
+     6.20992e+06,1.34265e+06,-399756; \
+     6.21482e+06,1.34374e+06,-310986; \
+     6.21842e+06,1.34454e+06,-222185; \
+     6.22091e+06,1.34494e+06,-133285; \
+     6.22211e+06,1.34524e+06,-44454.1; \
+     6.22211e+06,1.34524e+06,44499; \
+     6.22091e+06,1.34494e+06,133315; \
+     6.21842e+06,1.34444e+06,222205; \
+     6.21482e+06,1.34374e+06,310966; \
+     6.20153e+06,1.43168e+06,-133315; \
+     6.20273e+06,1.43198e+06,-44424.1;
+  end
+  subsection Visualization
+    set List of output variables      = strain rate, material properties, viscosity ratio, dynamic topography, nonadiabatic temperature
+    set Number of grouped files       = 0
+    set Time between graphical output = 0 
+    set Interpolate output            = true
+    subsection Material properties
+      set List of material properties = density,viscosity
+    end
+  end
+end
